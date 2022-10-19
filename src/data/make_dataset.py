@@ -3,18 +3,29 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
+from src.utils import save_as_pickle
+from preprocess import preprocess_data, preprocess_target, extract_target
+import pandas as pd
 
 
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
-@click.argument('output_filepath', type=click.Path())
-def main(input_filepath, output_filepath):
+@click.argument('output_data_filepath', type=click.Path())
+@click.argument('output_target_filepath', type=click.Path())
+def main(input_filepath, output_data_filepath, output_target_filepath=None):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
     logger.info('making final data set from raw data')
 
+    df = pd.read_csv(input_filepath)
+    df = preprocess_data(df)
+    if output_target_filepath:
+        df, target = extract_target(df)
+        target = preprocess_target(target)
+        save_as_pickle(target, output_target_filepath)
+    save_as_pickle(df, output_data_filepath)
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
