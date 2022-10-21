@@ -1,8 +1,20 @@
 stages:
   make_dataset:
-    cmd: python3 src/data/make_dataset.py data/raw/train.csv data/interim/train.pkl
+    cmd: python src/data/make_dataset.py data/raw/train.csv data/interim/train.pkl
+      data/interim/target.pkl
     deps:
     - data/raw/train.csv
-    - src/data/make_dataset_.py
+    - src/data/make_dataset.py
     outs:
     - data/interim/
+
+  features:
+    cmd: python src/features/build_features.py
+    deps:
+    - data/interim/target.pkl
+    - data/interim/train.pkl
+    - src/data/build_features.py
+    outs:
+    - data/process
+
+dvc stage add -n train_models -d src/data/build_features.py -d data/interim/train.pkl -d data/interim/target.pkl -o data/process python src/features/build_features.py

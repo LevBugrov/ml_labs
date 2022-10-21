@@ -6,6 +6,7 @@ from dotenv import find_dotenv, load_dotenv
 from src.utils import save_as_pickle
 from preprocess import preprocess_data, preprocess_target, extract_target, data_cleaning
 import pandas as pd
+import os
 
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
@@ -22,6 +23,10 @@ def main(input_filepath, output_data_filepath, output_target_filepath=None):
     df = pd.read_csv(input_filepath)
     df = preprocess_data(df)
     df = data_cleaning(df)
+    if not os.path.isdir("data/interim"):
+        os.makedirs("data/interim")
+        with open(".gitkeep", "w") as _:
+            pass
     if output_target_filepath:
         df, target = extract_target(df)
         target = preprocess_target(target)
