@@ -15,3 +15,38 @@ stages:
       md5: b4c5aadc61366e8f5aa3186bfdfe2f09.dir
       size: 82458
       nfiles: 2
+  features:
+    cmd: python src/features/build_features.py data/interim/train.pkl data/processed/train.pkl
+    deps:
+    - path: data/interim/target.pkl
+      md5: 0b4cbec5ca168ffbbfa7399b28d9e2d9
+      size: 21128
+    - path: data/interim/train.pkl
+      md5: f1aa706ecbcb971a453abc0ecb51ed0b
+      size: 61330
+    - path: src/features/build_features.py
+      md5: 786f6ce9efd113fa345b9c79b122d41f
+      size: 1405
+    outs:
+    - path: data/processed
+      md5: 11fbd9911a938c3258af2001bfa27bcb.dir
+      size: 61330
+      nfiles: 1
+  train_models:
+    cmd: python src/models/train_model.py data/processed/train.pkl data/interim/target.pkl
+      models/pred.pkl
+    deps:
+    - path: data/interim/target.pkl
+      md5: 0b4cbec5ca168ffbbfa7399b28d9e2d9
+      size: 21128
+    - path: data/processed/train.pkl
+      md5: f1aa706ecbcb971a453abc0ecb51ed0b
+      size: 61330
+    - path: src/models/train_model.py
+      md5: 521d10e7e10df9a1a70b43da1225d91c
+      size: 3685
+    outs:
+    - path: models
+      md5: e344ae5633b42a3a309d653a8e2ca6a8.dir
+      size: 7874
+      nfiles: 1

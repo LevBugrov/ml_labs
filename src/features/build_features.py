@@ -6,6 +6,7 @@ from dotenv import find_dotenv, load_dotenv
 from src.utils import save_as_pickle
 import pandas as pd
 from features import add_early_wakeup
+import os
 
 
 @click.command()
@@ -24,10 +25,10 @@ def main(
     logger.info('making final data set from interim data')
 
     df = pd.read_pickle(input_filepath)
-    
-    
-    
-    
+    if not os.path.isdir("data/processed"):
+        os.makedirs("data/processed")
+        with open(".gitkeep", "w") as _:
+            pass    
     save_as_pickle(df, output_filepath)
 
 

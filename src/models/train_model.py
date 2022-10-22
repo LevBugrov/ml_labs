@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from cgi import test
 import click
 import logging
 from pathlib import Path
@@ -11,17 +10,17 @@ import pickle
 from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
 from catboost import CatBoostClassifier, Pool
 #from sklearn.tree import DecisionTreeClassifier
-from src.features import features
+#from src.features import features
 from sklearn.linear_model import RidgeClassifier
 from catboost import Pool, CatBoostClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+import os
 
 
 @click.command()
-@click.argument('input_data_filepath', type=click.Path(exists=True))
-@click.argument('input_catboost_model', type=click.Path())
-@click.argument('input_sklearn_model', type=click.Path())
+@click.argument('input_train_filepath', type=click.Path(exists=True))
+@click.argument('input_target_filepath', type=click.Path())
 @click.argument('output_predictions_filepath', type=click.Path())
 
 def main(input_train_filepath, input_target_filepath, output_predictions_filepath):
@@ -46,16 +45,15 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
     for i in cfg.CAT_COLS:
             train[i] = encod.fit_transform(train[i])
             
-    test[cfg.CAT_COLS] = test[cfg.CAT_COLS].astype('object')
+    '''test[cfg.CAT_COLS] = test[cfg.CAT_COLS].astype('object')
 
-    test = features.add_early_wakeup(test)
     encod = LabelEncoder()
     for i in cfg.OHE_COLS:
             test[i] = encod.fit_transform(test[i])
     for i in cfg.REAL_COLS:
             test[i] = encod.fit_transform(test[i])
     for i in cfg.CAT_COLS:
-            test[i] = encod.fit_transform(test[i])
+            test[i] = encod.fit_transform(test[i])'''
     
 
     train_x, val_x, train_y, val_y = train_test_split(train, target, test_size=0.2, 
@@ -77,6 +75,10 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
 
 
     #output
+    if not os.path.isdir("models"):
+        os.makedirs("models")
+        with open(".gitkeep", "w") as _:
+            pass    
     predictions = {
 
         'catboost_prediction': y_pred_cb,
