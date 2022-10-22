@@ -9,13 +9,13 @@ stages:
     - data/interim/
 
   features:
-    cmd: python src\features\build_features.py data/interim/train.pkl data/process/train.pkl
+    cmd: python src/features/build_features.py data/interim/train.pkl data/processed/train.pkl
     deps:
     - data/interim/target.pkl
     - data/interim/train.pkl
     - src/data/build_features.py
     outs:
-    - data/process
+    - data/processed
 
   train_models:
     cmd: python src/models/train_model.py data/process/train.pkl data/interim/target.pkl models/pred.pkl
