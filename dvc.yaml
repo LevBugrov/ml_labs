@@ -18,7 +18,7 @@ stages:
     - data/processed
 
   train_models:
-    cmd: python src/models/train_model.py data/processed/train.pkl data/interim/target.pkl models/pred.pkl
+    cmd: python src/models/train_model.py data/processed/train.pkl data/interim/target.pkl models
     deps:
     - data/interim/target.pkl
     - data/processed/train.pkl
