@@ -21,7 +21,7 @@ stages:
     cmd: python src/models/train_model.py data/process/train.pkl data/interim/target.pkl models/pred.pkl
     deps:
     - data/interim/target.pkl
-    - data/process/train.pkl
+    - data/processed/train.pkl
     - src/models/train_model.py
     outs:
     - models
