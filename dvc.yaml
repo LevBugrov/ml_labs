@@ -9,7 +9,7 @@ stages:
     - data/interim/
 
   features:
-    cmd: python src/features/build_features.py
+    cmd: python src\features\build_features.py data/interim/train.pkl data/process/train.pkl
     deps:
     - data/interim/target.pkl
     - data/interim/train.pkl
@@ -17,4 +17,11 @@ stages:
     outs:
     - data/process
 
-dvc stage add -n train_models -d src/data/build_features.py -d data/interim/train.pkl -d data/interim/target.pkl -o data/process python src/features/build_features.py
+  train_models:
+    cmd: python src/models/train_model.py data/process/train.pkl data/interim/target.pkl models/pred.pkl
+    deps:
+    - data/interim/target.pkl
+    - data/process/train.pkl
+    - src/models/train_model.py
+    outs:
+    - models
