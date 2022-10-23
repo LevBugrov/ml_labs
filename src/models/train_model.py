@@ -43,7 +43,7 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
     #y_pred_rc = ridge.predict(val_x)
 
 
-    cat = CatBoostClassifier(iterations=100, loss_function='MultiLogloss', 
+    cat = CatBoostClassifier(iterations=2000, loss_function='MultiLogloss', 
                                     eval_metric='MultiLogloss', learning_rate=0.05, 
                                     bootstrap_type='Bayesian', boost_from_average=False, 
                                     leaf_estimation_iterations=1, leaf_estimation_method='Gradient')
