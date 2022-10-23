@@ -7,13 +7,20 @@ from src.utils import save_as_pickle
 from preprocess import preprocess_data, preprocess_target, extract_target, data_cleaning
 import pandas as pd
 import os
+from sklearn.model_selection import train_test_split
+import src.config as cfg
+from sklearn.preprocessing import LabelEncoder
 
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
 @click.argument('output_data_filepath', type=click.Path())
 @click.argument('output_target_filepath', type=click.Path())
+@click.argument('output_dataval_filepath', type=click.Path())
+@click.argument('output_targetval_filepath', type=click.Path())
 
-def main(input_filepath, output_data_filepath, output_target_filepath=None):
+def main(input_filepath, 
+         output_data_filepath, output_target_filepath=None, 
+         output_dataval_filepath=None, output_targetval_filepath=None):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
@@ -27,10 +34,30 @@ def main(input_filepath, output_data_filepath, output_target_filepath=None):
         os.makedirs("data/interim")
         with open(".gitkeep", "w") as _:
             pass
+        
+    encod = LabelEncoder()
+    for i in cfg.OHE_COLS:
+        df[i] = encod.fit_transform(df[i])
+    for i in cfg.REAL_COLS:
+        df[i] = encod.fit_transform(df[i])
+    for i in cfg.CAT_COLS:
+        df[i] = encod.fit_transform(df[i])
+    
     if output_target_filepath:
         df, target = extract_target(df)
         target = preprocess_target(target)
-        save_as_pickle(target, output_target_filepath)
+        train_x, val_x, train_y, val_y = train_test_split(df, target, test_size=0.2, 
+                                                      shuffle=True, random_state=42, 
+                                                      stratify=target.iloc[:,[1, 2, 3, 4]].sum(axis=1))
+        
+        
+        
+        df = train_x
+        save_as_pickle(train_y, output_target_filepath)
+        save_as_pickle(val_x, output_dataval_filepath)
+        save_as_pickle(val_y, output_targetval_filepath)
+        
+        
     save_as_pickle(df, output_data_filepath)
 
 

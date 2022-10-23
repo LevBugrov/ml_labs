@@ -11,13 +11,11 @@ import os
 
 @click.command()
 @click.argument('input_filepath', type=click.Path(exists=True))
+@click.argument('input_val_filepath', type=click.Path())
 @click.argument('output_filepath', type=click.Path())
+@click.argument('output_val_filepath', type=click.Path())
 
-
-def main(
-    input_filepath, 
-    output_filepath
-    ):
+def main(input_filepath, output_filepath, input_val_filepath, output_val_filepath):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
@@ -25,11 +23,13 @@ def main(
     logger.info('making final data set from interim data')
 
     df = pd.read_pickle(input_filepath)
+    df_val = pd.read_pickle(input_val_filepath)
     if not os.path.isdir("data/processed"):
         os.makedirs("data/processed")
         with open(".gitkeep", "w") as _:
             pass    
     save_as_pickle(df, output_filepath)
+    save_as_pickle(df, output_val_filepath)
 
 
 if __name__ == '__main__':

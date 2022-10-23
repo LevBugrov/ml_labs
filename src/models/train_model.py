@@ -33,17 +33,18 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
     #load data
     train = pd.read_pickle(input_train_filepath)
     target = pd.read_pickle(input_target_filepath)
+    
         
     train[cfg.CAT_COLS] = train[cfg.CAT_COLS].astype('object')
     
 
-    encod = LabelEncoder()
+    '''encod = LabelEncoder()
     for i in cfg.OHE_COLS:
             train[i] = encod.fit_transform(train[i])
     for i in cfg.REAL_COLS:
             train[i] = encod.fit_transform(train[i])
     for i in cfg.CAT_COLS:
-            train[i] = encod.fit_transform(train[i])
+            train[i] = encod.fit_transform(train[i])'''
             
     '''test[cfg.CAT_COLS] = test[cfg.CAT_COLS].astype('object')
 
@@ -56,14 +57,11 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
             test[i] = encod.fit_transform(test[i])'''
     
 
-    train_x, val_x, train_y, val_y = train_test_split(train, target, test_size=0.2, 
-                                                      shuffle=True, random_state=cfg.RANDOM_STATE, 
-                                                      stratify=target.iloc[:,[1, 2, 3, 4]].sum(axis=1))
-    
+    train_x, train_y = train, target
     #models
     ridge = RidgeClassifier()
     ridge.fit(train_x, train_y)
-    y_pred_rc = ridge.predict(val_x)
+    #y_pred_rc = ridge.predict(val_x)
 
 
     cat = CatBoostClassifier(iterations=100, loss_function='MultiLogloss', 
@@ -71,7 +69,7 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
                                     bootstrap_type='Bayesian', boost_from_average=False, 
                                     leaf_estimation_iterations=1, leaf_estimation_method='Gradient')
     cat.fit(train_x, train_y)
-    y_pred_cb = cat.predict(val_x)
+    #y_pred_cb = cat.predict(val_x)
 
 
     #output
@@ -80,14 +78,12 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
         with open(".gitkeep", "w") as _:
             pass    
     
-    predictions = {
-
+    '''predictions = {
         'catboost_prediction': y_pred_cb,
         'sklearn_prediction': y_pred_rc,
+    }'''
 
-    }
-
-    pickle.dump(predictions, open(output_predictions_filepath +'/pred.pkl', 'wb'))
+    #pickle.dump(predictions, open(output_predictions_filepath +'/pred.pkl', 'wb'))
     pickle.dump(cat, open(output_predictions_filepath +'/catboost.pkl', 'wb'))
     pickle.dump(ridge, open(output_predictions_filepath +'/ridge.pkl', 'wb'))
     

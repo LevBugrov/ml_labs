@@ -2,51 +2,55 @@ schema: '2.0'
 stages:
   make_dataset:
     cmd: python src/data/make_dataset.py data/raw/train.csv data/interim/train.pkl
-      data/interim/target.pkl
+      data/interim/target.pkl data/interim/train_val.pkl data/interim/target_val.pkl
     deps:
     - path: data/raw/train.csv
       md5: 88f8b56af68bf8c7cf3fda9ae4ff02a8
       size: 400268
     - path: src/data/make_dataset.py
-      md5: ddf3a4e033718a13b1bf989005617d2e
-      size: 1758
+      md5: fda9e4dde33bc813e36d8d89291d89a2
+      size: 2825
     outs:
     - path: data/interim/
-      md5: b4c5aadc61366e8f5aa3186bfdfe2f09.dir
-      size: 82458
-      nfiles: 2
+      md5: 431947dc71d3f77187b6cec9c4c39ab8.dir
+      size: 239631
+      nfiles: 4
   features:
-    cmd: python src/features/build_features.py data/interim/train.pkl data/processed/train.pkl
+    cmd: python src/features/build_features.py data/interim/train.pkl data/interim/train_val.pkl
+      data/processed/train.pkl data/processed/train_val.pkl
     deps:
     - path: data/interim/target.pkl
-      md5: 0b4cbec5ca168ffbbfa7399b28d9e2d9
-      size: 21128
+      md5: 50e3c7c1bc1a90c06ccc2fe90526859d
+      size: 16924
     - path: data/interim/train.pkl
-      md5: f1aa706ecbcb971a453abc0ecb51ed0b
-      size: 61330
+      md5: 735bb5f4f7b4f2c3e2a1daa378f506e3
+      size: 173091
+    - path: data/interim/train_val.pkl
+      md5: 8b6fe2af0911ea9659f858518b9ba729
+      size: 44727
     - path: src/features/build_features.py
-      md5: 786f6ce9efd113fa345b9c79b122d41f
-      size: 1405
+      md5: b1817d9dfbe0eac3b4d3002b3d019d3f
+      size: 1637
     outs:
     - path: data/processed
-      md5: 11fbd9911a938c3258af2001bfa27bcb.dir
-      size: 61330
-      nfiles: 1
+      md5: 19fc45c0f79a4663c2df45714a9f12ec.dir
+      size: 346182
+      nfiles: 2
   train_models:
     cmd: python src/models/train_model.py data/processed/train.pkl data/interim/target.pkl
       models
     deps:
     - path: data/interim/target.pkl
-      md5: 0b4cbec5ca168ffbbfa7399b28d9e2d9
-      size: 21128
+      md5: 50e3c7c1bc1a90c06ccc2fe90526859d
+      size: 16924
     - path: data/processed/train.pkl
-      md5: f1aa706ecbcb971a453abc0ecb51ed0b
-      size: 61330
+      md5: 735bb5f4f7b4f2c3e2a1daa378f506e3
+      size: 173091
     - path: src/models/train_model.py
-      md5: 9f8407601f1f60e5bf03af9444f3e469
-      size: 3869
+      md5: f582602df172f97d4cc6461e5c612912
+      size: 3626
     outs:
     - path: models
-      md5: e344ae5633b42a3a309d653a8e2ca6a8.dir
-      size: 7874
-      nfiles: 1
+      md5: b819340ec98f15edce415d7b3183470a.dir
+      size: 309491
+      nfiles: 2
