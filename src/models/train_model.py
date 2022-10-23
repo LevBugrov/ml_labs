@@ -33,31 +33,10 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
     #load data
     train = pd.read_pickle(input_train_filepath)
     target = pd.read_pickle(input_target_filepath)
-    
         
     train[cfg.CAT_COLS] = train[cfg.CAT_COLS].astype('object')
-    
-
-    '''encod = LabelEncoder()
-    for i in cfg.OHE_COLS:
-            train[i] = encod.fit_transform(train[i])
-    for i in cfg.REAL_COLS:
-            train[i] = encod.fit_transform(train[i])
-    for i in cfg.CAT_COLS:
-            train[i] = encod.fit_transform(train[i])'''
-            
-    '''test[cfg.CAT_COLS] = test[cfg.CAT_COLS].astype('object')
-
-    encod = LabelEncoder()
-    for i in cfg.OHE_COLS:
-            test[i] = encod.fit_transform(test[i])
-    for i in cfg.REAL_COLS:
-            test[i] = encod.fit_transform(test[i])
-    for i in cfg.CAT_COLS:
-            test[i] = encod.fit_transform(test[i])'''
-    
-
     train_x, train_y = train, target
+    
     #models
     ridge = RidgeClassifier()
     ridge.fit(train_x, train_y)

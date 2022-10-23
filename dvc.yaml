@@ -1,6 +1,7 @@
 stages:
   make_dataset:
-    cmd: python src/data/make_dataset.py data/raw/train.csv data/interim/train.pkl data/interim/target.pkl data/interim/train_val.pkl data/interim/target_val.pkl
+    cmd: python src/data/make_dataset.py data/raw/train.csv data/interim/train.pkl
+      data/interim/target.pkl data/interim/train_val.pkl data/interim/target_val.pkl
     deps:
     - data/raw/train.csv
     - src/data/make_dataset.py
@@ -8,7 +9,8 @@ stages:
     - data/interim/
 
   features:
-    cmd: python src/features/build_features.py data/interim/train.pkl data/interim/train_val.pkl data/processed/train.pkl data/processed/train_val.pkl
+    cmd: python src/features/build_features.py data/interim/train.pkl data/interim/train_val.pkl
+      data/processed/train.pkl data/processed/train_val.pkl
     deps:
     - data/interim/target.pkl
     - data/interim/train.pkl
@@ -31,17 +33,26 @@ stages:
 
 
   models_evaluation:
-    cmd: python src/models/evaluate.py models/catboost.pkl models/ridge.pkl data/processed/train.pkl data/interim/target.pkl reports/evaluation.json
+    cmd: python src/models/evaluate.py models/catboost.pkl models/ridge.pkl data/processed/train.pkl
+      data/interim/target.pkl reports/evaluate/evaluation.json
     deps:
     - models/catboost.pkl
     - models/ridge.pkl
     - src/models/evaluate.py
     - data/processed/train.pkl
     - data/interim/target.pkl
-    - data/processed/train_val.pkl 
+    - data/processed/train_val.pkl
     - data/interim/target_val.pkl
     metrics:
-    - reports/evaluation.json:
+    - reports/evaluate/evaluation.json:
         cache: false
 
-  
+
+  inference:
+    cmd: python src/models/predict_model.py data/raw/test.csv models/catboost.pkl models/ridge.pkl reports/inference/
+    deps:
+    - models/catboost.pkl
+    - models/ridge.pkl
+    - data/raw/test.csv
+    outs:
+    - reports/inference

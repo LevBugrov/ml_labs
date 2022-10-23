@@ -68,7 +68,6 @@ def main(input_data_filepath, input_target_filepath, input_catboost_model, input
     
     with open(output_metrics_filepath, 'w') as outfile:
         json.dump(metrics, outfile)
-    #pickle.dump(metrics, open(output_metrics_filepath, 'wb'))
 
 
 
