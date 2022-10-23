@@ -10,6 +10,7 @@ from src.data.preprocess import *
 import src.config as cfg
 from sklearn.preprocessing import LabelEncoder
 import os
+import features as fe
 
 
 @click.command()
@@ -40,6 +41,9 @@ def main(input_data_filepath, input_catboost_model, input_sklearn_model, output_
     '''test_data = add_early_wakeup(test_data)
     test_data = add_lastly_sleep(test_data)'''
 
+    test_data = fe.add_healthy_lifestyle(test_data)
+    test_data = fe.add_susceptibility_to_disease(test_data)
+
     sklearn_model = pickle.load(open(input_sklearn_model, 'rb'))
     catboost_model = pickle.load(open(input_catboost_model, 'rb'))
 
@@ -49,10 +53,6 @@ def main(input_data_filepath, input_catboost_model, input_sklearn_model, output_
     df_pred_sc = pd.DataFrame(sklearn_prediction, columns = cfg.TARGET_COLS, index=test_data.index)
     df_pred_cb = pd.DataFrame(catboost_prediction, columns = cfg.TARGET_COLS, index=test_data.index)
     
-    predictions = {
-        'catboost_prediction': catboost_prediction,
-        'sklearn_prediction': sklearn_prediction,
-    }
     
     if not os.path.isdir("reports/inference"):
         os.makedirs("reports/inference")

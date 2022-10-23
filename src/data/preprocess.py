@@ -59,10 +59,6 @@ def data_cleaning(df: pd.DataFrame) -> pd.DataFrame:
         df = df.drop('ID_y', axis=1)
     if 'ID' in df.columns:
         df = df.set_index('ID')
-
-    """df = df.drop(df[df['Возраст алког'].isna()].index)
-    df = df.drop(df[df['Пол'].isna()].index)
-    df = df.drop(df[df['Частота пасс кур'].isna()].index)"""
     
     Ohe_int_columns = [config.OHE_COLS[i] for i in range(len(config.OHE_COLS)) if type(df[config.OHE_COLS[i]][0]) == np.int64]
     df[Ohe_int_columns] = df[Ohe_int_columns].astype(np.int8)

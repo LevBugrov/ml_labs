@@ -33,8 +33,8 @@ stages:
 
 
   models_evaluation:
-    cmd: python src/models/evaluate.py models/catboost.pkl models/ridge.pkl data/processed/train.pkl
-      data/interim/target.pkl reports/evaluate/evaluation.json
+    cmd: python src/models/evaluate.py models/catboost.pkl models/ridge.pkl data/processed/train_val.pkl
+      data/interim/target_val.pkl reports/evaluate/evaluation.json
     deps:
     - models/catboost.pkl
     - models/ridge.pkl

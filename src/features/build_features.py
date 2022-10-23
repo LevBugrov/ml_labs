@@ -5,7 +5,7 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 from src.utils import save_as_pickle
 import pandas as pd
-from features import add_early_wakeup
+import features as fe
 import os
 
 
@@ -24,12 +24,20 @@ def main(input_filepath, output_filepath, input_val_filepath, output_val_filepat
 
     df = pd.read_pickle(input_filepath)
     df_val = pd.read_pickle(input_val_filepath)
+    
+    df = fe.add_healthy_lifestyle(df)
+    df_val = fe.add_healthy_lifestyle(df_val) 
+    
+    df = fe.add_susceptibility_to_disease(df)
+    df_val = fe.add_susceptibility_to_disease(df_val)
+    
     if not os.path.isdir("data/processed"):
         os.makedirs("data/processed")
         with open(".gitkeep", "w") as _:
             pass    
+    
     save_as_pickle(df, output_filepath)
-    save_as_pickle(df, output_val_filepath)
+    save_as_pickle(df_val, output_val_filepath)
 
 
 if __name__ == '__main__':

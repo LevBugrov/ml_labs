@@ -56,13 +56,7 @@ def main(input_train_filepath, input_target_filepath, output_predictions_filepat
         os.makedirs("models")
         with open(".gitkeep", "w") as _:
             pass    
-    
-    '''predictions = {
-        'catboost_prediction': y_pred_cb,
-        'sklearn_prediction': y_pred_rc,
-    }'''
 
-    #pickle.dump(predictions, open(output_predictions_filepath +'/pred.pkl', 'wb'))
     pickle.dump(cat, open(output_predictions_filepath +'/catboost.pkl', 'wb'))
     pickle.dump(ridge, open(output_predictions_filepath +'/ridge.pkl', 'wb'))
     

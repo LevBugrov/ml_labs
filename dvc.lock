@@ -29,12 +29,12 @@ stages:
       md5: 8b6fe2af0911ea9659f858518b9ba729
       size: 44727
     - path: src/features/build_features.py
-      md5: b1817d9dfbe0eac3b4d3002b3d019d3f
-      size: 1637
+      md5: d1c387ded06d6dc727f5c777f9e8079f
+      size: 1838
     outs:
     - path: data/processed
-      md5: 19fc45c0f79a4663c2df45714a9f12ec.dir
-      size: 346182
+      md5: 1fa9b5c2345b84e0a8c72f2a44dc4064.dir
+      size: 233536
       nfiles: 2
   train_models:
     cmd: python src/models/train_model.py data/processed/train.pkl data/interim/target.pkl
@@ -44,19 +44,19 @@ stages:
       md5: 50e3c7c1bc1a90c06ccc2fe90526859d
       size: 16924
     - path: data/processed/train.pkl
-      md5: 735bb5f4f7b4f2c3e2a1daa378f506e3
-      size: 173091
+      md5: 6398133a36bbf8da4573b256401fa061
+      size: 185535
     - path: src/models/train_model.py
-      md5: d6b51c9eefa22b74438356ede03bad9a
-      size: 2976
+      md5: 418987f0c3ba3b263dd59c97f8f1b116
+      size: 2767
     outs:
     - path: models
-      md5: f05e4f884390b3242740e8a5f496137f.dir
-      size: 309491
+      md5: 5278efe2e6e7621a985dd055f76f64f7.dir
+      size: 6242528
       nfiles: 2
   models_evaluation:
-    cmd: python src/models/evaluate.py models/catboost.pkl models/ridge.pkl data/processed/train.pkl
-      data/interim/target.pkl reports/evaluate/evaluation.json
+    cmd: python src/models/evaluate.py models/catboost.pkl models/ridge.pkl data/processed/train_val.pkl
+      data/interim/target_val.pkl reports/evaluate/evaluation.json
     deps:
     - path: data/interim/target.pkl
       md5: 50e3c7c1bc1a90c06ccc2fe90526859d
@@ -65,24 +65,24 @@ stages:
       md5: 9f291e4b1e3ec573b5a4c556dae559c1
       size: 4889
     - path: data/processed/train.pkl
-      md5: 735bb5f4f7b4f2c3e2a1daa378f506e3
-      size: 173091
+      md5: 6398133a36bbf8da4573b256401fa061
+      size: 185535
     - path: data/processed/train_val.pkl
-      md5: 735bb5f4f7b4f2c3e2a1daa378f506e3
-      size: 173091
+      md5: 6787a92aacf2559afa894dca1f9aba4d
+      size: 48001
     - path: models/catboost.pkl
-      md5: bdda44b4903cabab5414761de982fa3a
-      size: 306373
+      md5: 5936c0419053122d796712f6160d398f
+      size: 6239260
     - path: models/ridge.pkl
-      md5: ee5f3d1502e6ea1a2b3983f9d6b82346
-      size: 3118
+      md5: 2e7941ca830f7bddd4f3f4a254c2ea08
+      size: 3268
     - path: src/models/evaluate.py
       md5: 6fb21418a52be49e4aca5e08f718b00b
       size: 3239
     outs:
     - path: reports/evaluate/evaluation.json
-      md5: d2d76527a2646252deb5c874edfd8e29
-      size: 307
+      md5: 2d94e6035902ec10e525782fa3f6639e
+      size: 309
   inference:
     cmd: python src/models/predict_model.py data/raw/test.csv models/catboost.pkl
       models/ridge.pkl reports/inference/
@@ -91,13 +91,13 @@ stages:
       md5: a34d239835317e59b1b9f2fec27fa427
       size: 249580
     - path: models/catboost.pkl
-      md5: bdda44b4903cabab5414761de982fa3a
-      size: 306373
+      md5: 5936c0419053122d796712f6160d398f
+      size: 6239260
     - path: models/ridge.pkl
-      md5: ee5f3d1502e6ea1a2b3983f9d6b82346
-      size: 3118
+      md5: 2e7941ca830f7bddd4f3f4a254c2ea08
+      size: 3268
     outs:
     - path: reports/inference
-      md5: 804288561a52ad7b9e99ddba58391030.dir
+      md5: f8723fc92d143792c02cd27b218ca543.dir
       size: 32352
       nfiles: 2
