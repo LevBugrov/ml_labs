@@ -20,7 +20,7 @@ F1 score: комбинация Precision и Recall
  Цель оценки F1 состоит в том, чтобы объединить метрики Precision и Recall в единую метрику. В то же время оценка F1 была разработана, чтобы хорошо работать с несбалансированными данными, поэтому мы выбрали именно её.  
  F1 score = (2*Precision*Recall)/(Precision+Recall)
 
-итоговые метрики находятся в файле reports/evaluation.json 
+Итоговые метрики находятся в файле reports/evaluation.json 
 предсказанные данные находятся в файлах reports\inference\catboost_pred.csv reports\inference\sklearn_pred.csv
 
 
